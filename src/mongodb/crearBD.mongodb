@@ -1,0 +1,175 @@
+/**-ACTIVIDAD 1-**/
+
+/**Crear la base de datos BddAlumnos**/
+use('BddAlumnos');
+
+/**Agregar una colección llamada Estudiantes**/
+db.createCollection('Estudiantes');
+
+/**Insertar un documento con la cláusula insertOne con su información básica: Nombre, dirección, 
+teléfono **/
+db.Estudiantes.insertOne({
+  '_id': 1, 
+  'nombre': 'Marlon Velez', 
+  'direccion': 'Baños', 
+  'telefono': '0979574883' 
+});
+
+/**Insertar tres documentos con la cláusula insertMany con información de sus compañeros**/
+use('BddAlumnos');
+db.Estudiantes.insertMany([
+  { 
+    '_id': 2, 
+    'nombre': 'William Tocto', 
+    'direccion': 'Miraflores', 
+    'telefono': '0958147153'  },
+
+  { 
+    '_id': 3, 
+    'nombre': 'Danny Tenemea', 
+    'direccion': 'Totoracocha', 
+    'telefono': '0999254473'  },
+  
+  { 
+    '_id': 4, 
+    'nombre': 'Jose Murillo', 
+    'direccion': 'Misicata', 
+    'telefono': '0993214733'  },
+]);
+
+/**Insertar un documento cuyo _id sea repetido (sale un error)**/
+use('BddAlumnos');
+db.Estudiantes.insertOne({
+  '_id': 1, 
+  'nombre': 'Mateo Vidal', 
+  'direccion': 'Sinincay', 
+  'telefono': '0983274413' 
+});
+
+/**Mostrar todos los documentos de la colección Estudiantes**/
+use('BddAlumnos');
+db.Estudiantes.find({}).limit(100).toArray();
+
+/**Borrar todos los documentos de la colección Estudiantes**/
+use('BddAlumnos');
+db.Estudiantes.deleteMany({});
+
+/**Eliminar la colección Estudiantes**/
+use('BddAlumnos');
+db.Estudiantes.drop();
+
+/**Eliminar la base de datos BddAlumnos**/
+use('BddAlumnos');
+db.dropDatabase();
+
+
+/**-ACTIVIDAD 2-**/
+
+/**Crear la colección 'articulos' y cargar los siguientes documentos:**/
+use('BddAct2');
+db.articulos.insertMany([
+   {
+        _id: 1, 
+        nombre: 'MULTIFUNCION HP DESKJET 2675',
+        rubro: 'impresora',
+        precio: 3000,
+        stock: 20 
+    },
+
+    {
+        _id: 2, 
+        nombre: 'MULTIFUNCION EPSON EXPRESSION XP241',
+        rubro: 'impresora',
+        precio: 3700,
+        stock: 5 
+    },
+
+    {
+        _id: 3, 
+        nombre: 'LED 19 PHILIPS',
+        rubro: 'monitor',
+        precio: 4500,
+        stock: 2
+    },
+
+    {
+        _id: 4, 
+        nombre: 'LED 22 PHILIPS',
+        rubro: 'monitor',
+        precio: 5700,
+        stock: 4
+    },
+
+    {
+        _id: 5, 
+        nombre: 'LED 27 PHILIPS',
+        rubro: 'monitor',
+        precio: 12000,
+        stock: 1
+    },
+
+    {
+        _id: 6, 
+        nombre: 'LOGITECH M90',
+        rubro: 'mouse',
+        precio: 300,
+        stock: 4
+    }
+]);
+
+/**Imprimir todos los documentos de la colección 'articulos'.**/
+use('BddAct2');
+db.articulos.find({}).limit(100).toArray();
+
+/**Imprimir todos los documentos de la colección 'articulos' que no son impresoras.**/
+use('BddAct2');
+db.articulos.find({rubro: {$ne: 'impresora'}}).limit(100).toArray();
+
+/**Imprimir todos los artículos que pertenecen al rubro de 'mouse'.**/
+use('BddAct2');
+db.articulos.find({rubro: 'mouse'}).limit(100).toArray();
+
+/**Imprimir todos los artículos con un precio mayor o igual a 5000.**/
+use('BddAct2');
+db.articulos.find({precio: { $gte:5000 }}).limit(100).toArray();
+
+/**Imprimir todas las impresoras que tienen un precio mayor o igual a 3500.**/
+use('BddAct2');
+db.articulos.find({$and: [{rubro: 'impresora'},{precio: { $gte:3500 }}]}).limit(100).toArray();
+
+/**Imprimir todos los artículos cuyo stock se encuentra comprendido entre 0 y 4.**/
+use('BddAct2');
+db.articulos.find({$and: [{stock: { $gte:0 }},{stock: { $lte:4 }}]}).limit(100).sort({ "stock": 1 });
+
+/**Borrar los documentos de la colección 'articulos' cuyo rubro son impresoras, utilizar las dos 
+sintaxis que permite MongoDB**/
+use('BddAct2');
+db.articulos.remove( { rubro: 'impresora' }, true );
+
+use('BddAct2');
+db.articulos.deleteMany({rubro: 'impresora'});
+
+/**Borrar todos los artículos que tienen un _id mayor o igual a 5.**/
+use('BddAct2');
+db.articulos.deleteMany({_id:{$gte: 5}});
+
+
+/**-ACTIVIDAD 3-**/
+
+/**Investigar los operadores $and, $or y $not, aplicar un ejemplo de cada uno en la colección 
+artículos de la actividad 2**/
+
+/**Ejemplo con el $and**/
+use('BddAct2');
+db.articulos.find({$and: [{precio: { $gt:3000 }},{precio: { $lt:5000 }}]}).limit(100).toArray();
+
+/**Ejemplo con el $or**/
+use('BddAct2');
+db.articulos.find({$or: [{rubro: 'impresora'},{rubro: 'mouse' }]}).limit(100).toArray();
+
+/**Ejemplo con el $not**/
+use('BddAct2');
+db.articulos.find({rubro: {$not: {$eq: 'impresora'}}}).limit(100).toArray();
+
+
+
